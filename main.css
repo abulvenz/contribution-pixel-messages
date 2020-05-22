@@ -1,0 +1,30 @@
+@import 'normalize.css';
+body {
+    font-family: sans-serif
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 900;
+    width: 80vw;
+}
+
+.display {}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(52, 1fr);
+    gap: 3px;
+    height: 10px;
+    margin-bottom: 3px;
+}
+
+.filled {
+    background-color: green;
+}
+
+.blank {
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 10px;
+    width: 100%;
+}
