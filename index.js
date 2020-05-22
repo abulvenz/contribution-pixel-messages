@@ -22,3 +22,5 @@ add.stdout.on('data', (data) => {
 const i = 0;
 
 const commit = spawn('git', ['commit', '-m', "" + i]);
+
+const push = spawn('git', ['push']);
