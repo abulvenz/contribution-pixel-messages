@@ -48,6 +48,7 @@ const createPlan = (date) => {
         flatMap(weekDays, element => element.week * 7 + element.day).map(dayOffset => {
             const volatileDate = new Date(date);
             volatileDate.setDate((volatileDate.getDate() + dayOffset));
+            volatileDate.setUTCHours(0);
             return volatileDate;
         }).sort((d1, d2) => d1 - d2);
 

@@ -1,28 +1,41 @@
-const GitHub = require('github-api');
 const fs = require('fs');
+const { spawn } = require('child_process');
 
-const gh = new GitHub(
-    fs.readFileSync('config.json').toJSON()
-);
+const plan = JSON.parse(fs.readFileSync('plan.json')).map(str => new Date(str));
 
-const repo = gh.getRepo('abulvenz/contribution-pixel-messages');
+const today = (() => {
+    const today_ = new Date();
+    // today.setHours(0);
+    today_.setMilliseconds(0);
+    today_.setUTCHours(0);
+    today_.setSeconds(0);
+    today_.setMinutes(0);
+    today_.toUTCString()
+    return today_;
+})();
 
-repo.listCommits({}, (err, commits) => {
-    console.log(commits[0].sha);
-    repo.commit(commits[0].sha, '', 'I mined a number', commit => {
-        console.log(commit)
-    })
-});
+const push_ = () => {
+    const push = spawn('git', ['push']);
+    push.on('exit', () => console.log('Done pushing.'));
+};
 
-// const { spawn } = require('child_process');
-// const add = spawn('git', ['add', '.']);
+const commit_ = () => {
+    const commit = spawn('git', ['commit', '-m', "No"]);
+    commit.on(
+        'exit', push_
+    );
+};
 
-// add.stdout.on('data', (data) => {
-//     console.log(`stdout: ${data}`);
-// });
+const add_ = () => {
+    const add = spawn('git', ['add', 'the_file.txt']);
+    add.on('exit', commit_);
+};
 
-// const i = 0;
+console.log(`Today is ${today.toUTCString()}`)
 
-// const commit = spawn('git', ['commit', '-m', "" + i]);
-
-// const push = spawn('git', ['push']);
+if (plan.some(s => s.toUTCString() === today.toUTCString())) {
+    const append = spawn('bash', ['append.sh']);
+    append.on('exit', add_);
+} else {
+    console.log('Today nothing will be committed.');
+}
