@@ -9,10 +9,7 @@ const range = (start, endExclusive) => {
 };
 
 const use = (v, fn) => fn(v);
-
 const flatMap = (arr, fn = e => e) => (arr || []).reduce((a_, v) => a_.concat(v.map(fn)), []);
-
-
 const createDisplay = (width, height) => {
     const pixels = [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0];
     const idx = (x, y) => y * width + x;
@@ -33,14 +30,11 @@ let display = createDisplay(width, height);
 
 
 let plan = null;
-
 let days = 7;
 let weeks = 52;
 
 const createPlan = (date) => {
-
     const startDate = new Date(date);
-
     const weekDays = range(0, days).map(day =>
         range(0, weeks).map(week =>
             display.at(week, day) ? {
@@ -52,12 +46,8 @@ const createPlan = (date) => {
 
     plan =
         flatMap(weekDays, element => element.week * 7 + element.day).map(dayOffset => {
-            console.log(dayOffset)
             const volatileDate = new Date(date);
-
-            volatileDate.setDate((startDate.getDate() + dayOffset));
-            console.log(startDate, dayOffset, volatileDate);
-
+            volatileDate.setDate((volatileDate.getDate() + dayOffset));
             return volatileDate;
         }).sort((d1, d2) => d1 - d2);
 
@@ -84,7 +74,7 @@ m.mount(document.body, {
             ),
             // div(display.pixels().join(', '))
             input({ type: 'date', oninput: e => createPlan(e.target.value) }),
-            pre(JSON.stringify(plan, null, 2)),
+            // pre(JSON.stringify(plan, null, 2)),
             plan ? a({
                 href: `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(plan))}`,
                 download: 'plan.json'
