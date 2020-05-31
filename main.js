@@ -1,12 +1,17 @@
 import m from 'mithril';
 import tagl from 'tagl-mithril';
-const { div, h1, button, pre } = tagl(m);
+const { div, h1, button, pre, input, a } = tagl(m);
 
 const range = (start, endExclusive) => {
     let r = [];
     for (let i = start; i < endExclusive; i++) r.push(i);
     return r;
 };
+
+const use = (v, fn) => fn(v);
+
+const flatMap = (arr, fn = e => e) => (arr || []).reduce((a_, v) => a_.concat(v.map(fn)), []);
+
 
 const createDisplay = (width, height) => {
     const pixels = [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0];
@@ -32,8 +37,11 @@ let plan = null;
 let days = 7;
 let weeks = 52;
 
-const createPlan = () => {
-    plan = range(0, days).map(day =>
+const createPlan = (date) => {
+
+    const startDate = new Date(date);
+
+    const weekDays = range(0, days).map(day =>
         range(0, weeks).map(week =>
             display.at(week, day) ? {
                 week,
@@ -41,6 +49,18 @@ const createPlan = () => {
             } : undefined
         ).filter(e => e)
     )
+
+    plan =
+        flatMap(weekDays, element => element.week * 7 + element.day).map(dayOffset => {
+            console.log(dayOffset)
+            const volatileDate = new Date(date);
+
+            volatileDate.setDate((startDate.getDate() + dayOffset));
+            console.log(startDate, dayOffset, volatileDate);
+
+            return volatileDate;
+        }).sort((d1, d2) => d1 - d2);
+
 };
 
 
@@ -62,9 +82,13 @@ m.mount(document.body, {
                     )
                 )
             ),
-            button({ onclick: e => createPlan() }, 'Export plan'),
             // div(display.pixels().join(', '))
-            pre(JSON.stringify(plan, null, 2))
+            input({ type: 'date', oninput: e => createPlan(e.target.value) }),
+            pre(JSON.stringify(plan, null, 2)),
+            plan ? a({
+                href: `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(plan))}`,
+                download: 'plan.json'
+            }, 'Download plan') : null
         ]
     )
 });

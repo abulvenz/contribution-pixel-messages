@@ -9,18 +9,20 @@ const repo = gh.getRepo('abulvenz/contribution-pixel-messages');
 
 repo.listCommits({}, (err, commits) => {
     console.log(commits[0].sha);
-    repo.commit()
+    repo.commit(commits[0].sha, '', 'I mined a number', commit => {
+        console.log(commit)
+    })
 });
 
-const { spawn } = require('child_process');
-const add = spawn('git', ['add', '.']);
+// const { spawn } = require('child_process');
+// const add = spawn('git', ['add', '.']);
 
-add.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
+// add.stdout.on('data', (data) => {
+//     console.log(`stdout: ${data}`);
+// });
 
-const i = 0;
+// const i = 0;
 
-const commit = spawn('git', ['commit', '-m', "" + i]);
+// const commit = spawn('git', ['commit', '-m', "" + i]);
 
-const push = spawn('git', ['push']);
+// const push = spawn('git', ['push']);
