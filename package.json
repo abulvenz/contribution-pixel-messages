@@ -1,8 +1,13 @@
 {
-  "dependencies": {
-    "github-api": "^3.3.0",
-    "mithril": "^2.0.4",
-    "normalize.css": "^8.0.1",
-    "tagl-mithril": "^1.2.2"
-  }
+    "dependencies": {
+        "mithril": "^2.0.4",
+        "normalize.css": "^8.0.1",
+        "tagl-mithril": "^1.2.2"
+    },
+    "scripts": {
+        "gh-page": "parcel build --public-url https://abulvenz.github.io/contribution-pixel-messages --out-dir docs index.html"
+    },
+    "devDependencies": {
+        "cssnano": "^4.1.10"
+    }
 }
