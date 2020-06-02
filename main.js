@@ -1,6 +1,6 @@
 import m from 'mithril';
 import tagl from 'tagl-mithril';
-const { div, h1, button, pre, input, a } = tagl(m);
+const { div, h1, button, pre, input, a, br, p } = tagl(m);
 
 const range = (start, endExclusive) => {
     let r = [];
@@ -78,15 +78,17 @@ m.mount(document.body, {
                 )
             ),
             // div(display.pixels().join(', '))
-            input({ type: 'date', oninput: e => createPlan(e.target.value) }),
+            input({ title: 'Select the starting date of your plan. It should be a sunday.', type: 'date', oninput: e => createPlan(e.target.value) }),
             // pre(JSON.stringify(plan, null, 2)),
-            button({ onclick: e => display.load() }, 'load'),
-            button({ onclick: e => display.save() }, 'save'),
+            button({ title: 'Load from local storage', onclick: e => display.load() }, 'load'),
+            button({ title: 'Save to local storage', onclick: e => display.save() }, 'save'),
             button({ onclick: e => display.clear() }, 'clear'),
             plan ? a({
                 href: `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(plan))}`,
                 download: 'plan.json'
-            }, 'Download plan') : null
+            }, 'Download plan') : null,
+            br(),
+            p('Find the source code on ', a({ href: 'https://github.com/abulvenz/contribution-pixel-messages' }, 'github'))
         ]
     )
 });
