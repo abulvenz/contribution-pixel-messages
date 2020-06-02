@@ -13,7 +13,7 @@ and placed the content
 ```
 which tells the scheduler to run the script on 00:54 each day.
 
-There is also a frontend that can be used to create `plan.json` suiting your needs. It can be used statically [here in this live demo](https://abulvent.github.io/contribution-pixel-messages).
+There is also a frontend that can be used to create `plan.json` suiting your needs. It can be used statically [here in this live demo](https://abulvenz.github.io/contribution-pixel-messages).
 
 To run and build it locally use 
 ```
