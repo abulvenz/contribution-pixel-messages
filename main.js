@@ -88,7 +88,7 @@ m.mount(document.body, {
                 download: 'plan.json'
             }, 'Download plan') : null,
             br(),
-            p('Find the source code on ', a({ href: 'https://github.com/abulvenz/contribution-pixel-messages' }, 'github')),
+            p('Find the source code and how it works on ', a({ href: 'https://github.com/abulvenz/contribution-pixel-messages' }, 'github')),
             p('Best viewed on Internet Explorer 4 with screen resolution set to 1024x768pixels.')
         ]
     )
