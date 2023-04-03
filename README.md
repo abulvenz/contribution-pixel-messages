@@ -1,7 +1,7 @@
 # contribution-pixel-messages
 Let's have some fun with the yearly contribution display of a github user.
 
-The result can be viewed on this [page](https://github.com/contribution-pixels).
+The result can be viewed on this [page](https://github.com/contribution-pixels), but you have to go back to 2020.
 
 To run it you need some cronjob running your script. On my UNIX-machine I edited the crontab using the command
 ```
